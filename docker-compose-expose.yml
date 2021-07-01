@@ -1,11 +1,13 @@
 version: '2'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper:3.4.6
+    container_name: zookeeper
+    image: psyoblade/data-engineer-zookeeper:1.0
     ports:
      - "2181:2181"
   kafka:
-    build: .
+    container_name: kafka
+    build: psyoblade/data-engineer-kafka:1.0
     ports:
      - "9092:9092"
     expose:
