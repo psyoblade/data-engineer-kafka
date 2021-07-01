@@ -1,23 +1,12 @@
 #!/usr/bin/env python
-import sys
-from time import sleep
-from json import dumps
-from kafka import KafkaProducer
+import threading, time
 
-def produce(port):
-    hostname="localhost:%d" % port
-    producer = KafkaProducer(
-        bootstrap_servers=[hostname],
-        value_serializer=lambda x: dumps(x).encode('utf-8')
-    )
-    for j in range(9999):
-        print("Iteration", j)
-        data = {'counter': j}
-        producer.send('events', value=data)
-        sleep(0.5)
+from kafka import KafkaAdminClient, KafkaConsumer, KafkaProducer
+from kafka.admin import NewTopic
 
-if __name__ == "__main__":
-    port = 9092
-    if len(sys.argv) == 2:
-        port = int(sys.argv[1])
-    produce(port)
+
+producer = KafkaProducer(bootstrap_servers='localhost:9092')
+producer.send('events', b"test")
+producer.send('events', b"\xc2Hola, mundo!")
+time.sleep(1)
+producer.close()
